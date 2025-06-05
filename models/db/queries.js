@@ -1,5 +1,13 @@
 const pool = require('./pool');
 
+async function createCategory(values) {
+  const SQL = `
+  INSERT INTO categories (name, description)
+  VALUES($1, $2)
+  `
+  await pool.query(SQL, values);
+}
+
 async function createVideoGame(values) {
   const SQL = `
   INSERT INTO video_games
@@ -21,6 +29,7 @@ async function createBoardGame(values) {
 }
 
 module.exports = {
+  createCategory,
   createVideoGame,
   createBoardGame,
 }

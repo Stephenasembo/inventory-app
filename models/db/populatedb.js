@@ -60,16 +60,24 @@ const boardGames = [
   },
 ]
 
-const SQL = `
-INSERT INTO categories (name, description)
-VALUES
-(video_games, Digital games where player control actions through input devices.),
-(board_games, Physical games where players move pieces around a specially designed board according to a set of rules.);
-`
+const categories = [
+  {
+    name: 'video_games',
+    description: 'Digital games where player control actions through input devices.',
+  },
+  {
+    name: 'board_games',
+    description: 'Physical games where players move pieces around a specially designed board according to a set of rules.',
+  },
+]
 
 async function main(){
   try {
     console.log('Populating database...');
+    for (const category of categories) {
+      const values = [category.name, category.description];
+      await db.createCategory(values);
+    }
     for (const game of videoGames) {
       const values = [game.title, game.platform, game.genre, game.developer, game.publisher,
         game.price, game.release_date, game.cover_image, game.stock];
