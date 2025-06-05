@@ -28,8 +28,17 @@ async function createBoardGame(values) {
   await pool.query(SQL, values);
 }
 
+async function getAllCategories() {
+  const SQL = `
+  SELECT * FROM categories;
+  `
+  const { rows } = await pool.query(SQL);
+  return rows;
+}
+
 module.exports = {
   createCategory,
   createVideoGame,
   createBoardGame,
+  getAllCategories,
 }
