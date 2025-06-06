@@ -52,6 +52,25 @@ async function createItem(values) {
   await pool.query(SQL, values);
 }
 
+async function getCategory(id) {
+  const SQL = `
+  SELECT * FROM categories
+  WHERE id = $1;
+  `
+  const { rows } = await pool.query(SQL, id);
+  return rows[0];
+}
+
+async function getAllItems(categoryId) {
+  const SQL = `
+  SELECT items.name FROM categories
+  JOIN items ON categories.id = items.categories_id
+  WHERE categories.id = $1;
+  `
+  const { rows } = await pool.query(SQL, categoryId);
+  return rows;
+}
+
 module.exports = {
   createCategory,
   createVideoGame,
@@ -59,4 +78,6 @@ module.exports = {
   getAllCategories,
   createItem,
   resetDatabase,
+  getCategory,
+  getAllItems,
 }

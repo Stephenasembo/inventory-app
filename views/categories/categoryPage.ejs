@@ -6,6 +6,17 @@
   <title>Document</title>
 </head>
 <body>
-  A list of the category's items will be displayed here.
+  <div>
+    <h1><%= categoryName%></h1>
+    <p>
+      <%= description%>
+    </p>
+    <p>Here is the list of items in this category:</p>
+    <ul>
+      <% items.forEach((item) => { %>
+        <li><%= item.name%></li>
+      <% }) %>
+    </ul>
+  </div>
 </body>
 </html>
