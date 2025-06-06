@@ -5,11 +5,7 @@ module.exports = {
     const id = [Number(req.params.categoryId)];
     const category = await db.getCategory(id);
     const items = await db.getAllItems(id);
-    res.render('categories/categoryPage.ejs', {
-      categoryName: category.name,
-      description: category.description,
-      items: items,
-    });
+    res.render('categories/categoryPage.ejs', { category, items });
   },
   getForm: (req, res) => {
     res.render('categories/categoryForm.ejs')

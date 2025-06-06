@@ -7,9 +7,9 @@
 </head>
 <body>
   <div>
-    <h1><%= categoryName%></h1>
+    <h1><%= category.name%></h1>
     <p>
-      <%= description%>
+      <%= category.description%>
     </p>
     <p>Here is the list of items in this category:</p>
     <ul>
@@ -17,6 +17,9 @@
         <li><%= item.name%></li>
       <% }) %>
     </ul>
+    <div>
+      Add a new item to this category <a href="/categories/items/<%= category.id%>/new">here</a>.
+    </div>
   </div>
 </body>
 </html>

@@ -1,11 +1,18 @@
+const db = require('../models/db/queries');
+
 module.exports = {
   getPage: (req, res) => {
     res.render('items/itemPage.ejs')
   },
-  getForm: (req, res) => {
-    res.render('items/itemForm.ejs')
+  getForm: async (req, res) => {
+    const id = [Number(req.params.categoryId)];
+    const category = await db.getCategory(id);
+    res.render('items/itemForm.ejs', { category })
   },
-  createItem: (req, res) => {
-    console.log('Item will be created at the database.')
+  createItem: async (req, res) => {
+    const id = req.params.categoryId;
+    const name = req.body.itemName;
+    await db.createItem([name, id]);
+    res.redirect(`/categories/${id}/page`);
   }
 };

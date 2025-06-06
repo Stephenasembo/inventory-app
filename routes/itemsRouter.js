@@ -3,7 +3,7 @@ const router = Router();
 const controller = require('../controllers/itemsController');
 
 router.get('/', controller.getPage);
-router.get('/new', controller.getForm);
-router.post('/new', controller.createItem);
+router.get('/:categoryId/new', controller.getForm);
+router.post('/:categoryId/new', controller.createItem);
 
 module.exports = router;

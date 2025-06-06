@@ -6,6 +6,16 @@
   <title>Document</title>
 </head>
 <body>
-  A form to create items will be displayed here.
+  <div>
+    <p>Create a new item for <%= category.name%> category.</p>
+    <br>
+    <div>
+      <form action="/categories/items/<%= category.id%>/new" method="post">
+        <label for="itemName">Name: </label>
+        <input type="text" name="itemName" id="itemName">
+        <button type="submit">Submit</button>
+      </form>
+    </div>
+  </div>
 </body>
 </html>
