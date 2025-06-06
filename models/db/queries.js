@@ -63,12 +63,21 @@ async function getCategory(id) {
 
 async function getAllItems(categoryId) {
   const SQL = `
-  SELECT items.name FROM categories
+  SELECT items.name, items.id FROM categories
   JOIN items ON categories.id = items.categories_id
   WHERE categories.id = $1;
   `
   const { rows } = await pool.query(SQL, categoryId);
   return rows;
+}
+
+async function getItem(id) {
+  const SQL = `
+  SELECT * FROM items
+  WHERE id = $1;
+  `
+  const { rows } = await pool.query(SQL, id);
+  return rows[0];
 }
 
 module.exports = {
@@ -80,4 +89,5 @@ module.exports = {
   resetDatabase,
   getCategory,
   getAllItems,
+  getItem,
 }

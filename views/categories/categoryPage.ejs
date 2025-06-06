@@ -14,7 +14,10 @@
     <p>Here is the list of items in this category:</p>
     <ul>
       <% items.forEach((item) => { %>
-        <li><%= item.name%></li>
+        <li>
+          <%= item.name%>
+          <a href="/items/<%= item.id%>/page">Item details</a>
+        </li>
       <% }) %>
     </ul>
     <div>

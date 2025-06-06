@@ -1,8 +1,10 @@
 const db = require('../models/db/queries');
 
 module.exports = {
-  getPage: (req, res) => {
-    res.render('items/itemPage.ejs')
+  getPage: async (req, res) => {
+    const id = [Number(req.params.itemId)];
+    const item = await db.getItem(id);
+    res.render('items/itemPage.ejs', {item})
   },
   getForm: async (req, res) => {
     const id = [Number(req.params.categoryId)];
