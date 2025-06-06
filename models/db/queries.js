@@ -36,9 +36,27 @@ async function getAllCategories() {
   return rows;
 }
 
+async function resetDatabase() {
+  const SQL = `
+  TRUNCATE categories, video_games, board_games, items
+  RESTART IDENTITY CASCADE;
+  `
+  await pool.query(SQL);
+}
+
+async function createItem(values) {
+  const SQL = `
+  INSERT INTO items(name, categories_id)
+  VALUES ($1, $2);
+  `
+  await pool.query(SQL, values);
+}
+
 module.exports = {
   createCategory,
   createVideoGame,
   createBoardGame,
   getAllCategories,
+  createItem,
+  resetDatabase,
 }

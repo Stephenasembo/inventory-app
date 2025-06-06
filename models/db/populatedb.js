@@ -71,23 +71,46 @@ const categories = [
   },
 ]
 
+const items = [
+  { name: 'GTA 5', category_id: 1 },
+  { name: 'FC25', category_id: 1 },
+  { name: 'Catan', category_id: 2 },
+  { name: 'Dominion', category_id: 2 },
+
+]
+
 async function main(){
   try {
     console.log('Populating database...');
+    // Reset Database First
+    await db.resetDatabase();
+
+    // Populate categories table
     for (const category of categories) {
       const values = [category.name, category.description];
       await db.createCategory(values);
     }
+
+    // Populate items table
+    for (const item of items) {
+      const values = [item.name, item.category_id];
+      await db.createItem(values);
+    }
+
+    // Populate video_games table
     for (const game of videoGames) {
       const values = [game.title, game.platform, game.genre, game.developer, game.publisher,
         game.price, game.release_date, game.cover_image, game.stock];
       await db.createVideoGame(values);
     };
+
+    // Populate board_games table
     for (const game of boardGames) {
       const values = [game.title, game.genre, game.designer, game.publisher, game.min_players, game.max_players,
         game.age_rating, game.duration, game.release_year, game.price, game.cover_image, game.stock];
       await db.createBoardGame(values);
     };
+
     console.log('Success');
   }
   catch(err) {
