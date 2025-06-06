@@ -6,6 +6,18 @@
   <title>Document</title>
 </head>
 <body>
-  A form to create a category will be displayed here.
+  <div>
+    <p>
+      Create a new category by filling in the category's details.
+    </p>
+    <form action="/categories/new" method="post">
+      <label for="categoryName">Name: </label>
+      <input type="text" name="categoryName" id="categoryName" required>
+      <br><br>
+      <label for="description">Description: </label>
+      <textarea name="description" id="description" maxlength="250" required></textarea>
+      <button type="submit">Submit</button>
+    </form>
+  </div>
 </body>
 </html>

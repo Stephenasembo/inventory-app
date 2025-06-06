@@ -10,7 +10,9 @@ module.exports = {
   getForm: (req, res) => {
     res.render('categories/categoryForm.ejs')
   },
-  createCategory: (req, res) => {
-    console.log('Category will be created at the database.')
+  createCategory: async (req, res) => {
+    const values = [req.body.categoryName, req.body.description]
+    await db.createCategory(values)
+    res.redirect('/')
   },
 };
