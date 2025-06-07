@@ -11,8 +11,21 @@
     <br>
     <div>
       <form action="/categories/items/<%= category.id%>/new" method="post">
-        <label for="itemName">Name: </label>
-        <input type="text" name="itemName" id="itemName" required>
+        <% fields.forEach((field) => { %>
+          <% if(field.column_name !== 'id') { %>
+            <% if(field.data_type === 'integer') { %>
+              <p>
+                <label for="<%=field.column_name%>"><%=field.column_name%></label>
+                <input type="number" name="<%=field.column_name%>" id="<%=field.column_name%>" required>
+              </p>
+            <% } else { %>
+              <p>
+                <label for="<%=field.column_name%>"><%=field.column_name%></label>
+                <input type="text" name="<%=field.column_name%>" id="<%=field.column_name%>" required>
+              </p>
+              <% } %>
+          <% } %>
+        <% }) %>
         <button type="submit">Submit</button>
       </form>
     </div>

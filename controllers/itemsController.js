@@ -9,12 +9,13 @@ module.exports = {
   getForm: async (req, res) => {
     const id = [Number(req.params.categoryId)];
     const category = await db.getCategory(id);
-    res.render('items/itemForm.ejs', { category })
+    const fields = await db.getCategoryFields(category.name);
+    res.render('items/itemForm.ejs', { category, fields })
   },
   createItem: async (req, res) => {
     const id = req.params.categoryId;
-    const name = req.body.itemName;
-    await db.createItem([name, id]);
+    const values = new Map(Object.entries(req.body));
+    await db.createItem(id, values);
     res.redirect(`/categories/${id}/page`);
   },
   getUpdateForm: async (req, res) => {

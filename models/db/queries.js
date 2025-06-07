@@ -44,12 +44,26 @@ async function resetDatabase() {
   await pool.query(SQL);
 }
 
-async function createItem(values) {
-  const SQL = `
-  INSERT INTO items(name, categories_id)
+async function createItem(categoryId, mappedValues) {
+  const name = mappedValues.get('title');
+  const categoryValues = [...mappedValues.values()];
+  const columns = [...mappedValues.keys()].join(',');
+  const category = await getCategory([Number(categoryId)]);
+  const placeholders = categoryValues.map((value, index) => {
+    return `$${index + 1}`
+  })
+  let SQL = `
+  INSERT INTO ${category.name} (${columns})
+  VALUES (${placeholders.join(',')});
+  `;
+  await pool.query(SQL, categoryValues);
+
+  const itemValues = [name, categoryId]
+  SQL = `
+  INSERT INTO items (name, categories_id)
   VALUES ($1, $2);
   `
-  await pool.query(SQL, values);
+  await pool.query(SQL, itemValues);
 }
 
 async function getCategory(id) {
@@ -89,6 +103,21 @@ async function updateItem(newValue, oldValue) {
   await pool.query(SQL, values);
 }
 
+async function getCategoryFields(category) {
+  let categories = await getAllCategories();
+  categories = categories.map((category) => category.name);
+  if(categories.includes(category)) {
+    const SQL = `
+    SELECT column_name, data_type
+    FROM information_schema.columns
+    WHERE table_name = '${category}';
+    `
+    const { rows } = await pool.query(SQL)
+    return rows;
+  }
+  return null;
+}
+
 module.exports = {
   createCategory,
   createVideoGame,
@@ -100,4 +129,5 @@ module.exports = {
   getAllItems,
   getItem,
   updateItem,
+  getCategoryFields,
 }
