@@ -80,6 +80,15 @@ async function getItem(id) {
   return rows[0];
 }
 
+async function updateItem(newValue, oldValue) {
+  const SQL = `
+  UPDATE items SET name = $1
+  WHERE name = $2;
+  `
+  const values = [newValue, oldValue]
+  await pool.query(SQL, values);
+}
+
 module.exports = {
   createCategory,
   createVideoGame,
@@ -90,4 +99,5 @@ module.exports = {
   getCategory,
   getAllItems,
   getItem,
+  updateItem,
 }

@@ -16,5 +16,17 @@ module.exports = {
     const name = req.body.itemName;
     await db.createItem([name, id]);
     res.redirect(`/categories/${id}/page`);
-  }
+  },
+  getUpdateForm: async (req, res) => {
+    const id = [req.params.itemId];
+    const item = await db.getItem(id);
+    res.render('items/updateItem.ejs', {item})
+  },
+  updateItem: async (req, res) => {
+    const id = [req.params.itemId];
+    const item = await db.getItem(id);
+    const newValue = req.body.newItemName;
+    await db.updateItem(newValue, item.name);
+    res.redirect(`/categories/${Number(item.categories_id)}/page`);
+  },
 };
