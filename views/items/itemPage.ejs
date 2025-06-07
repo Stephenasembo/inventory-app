@@ -6,9 +6,15 @@
   <title>Document</title>
 </head>
 <body>
-  <h1><%= item.name%></h1>
+  <h1><%= item.title%></h1>
   <div>
-    Name: <%= item.name%>
+    <% for(const [key, value] of Object.entries(item)) { %>
+      <% if(key !== 'id') { %>
+        <p>
+          <%= key%>: <%= value%>
+        </p>
+      <% } %>
+    <% } %>
   </div>
 </body>
 </html>

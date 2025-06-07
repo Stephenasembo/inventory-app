@@ -86,12 +86,26 @@ async function getAllItems(categoryId) {
 }
 
 async function getItem(id) {
-  const SQL = `
-  SELECT * FROM items
-  WHERE id = $1;
+  let SQL = `
+    SELECT categories.name FROM categories
+    JOIN items
+    ON items.categories_id = categories.id
+    WHERE items.id = $1
+    LIMIT 1;
   `
-  const { rows } = await pool.query(SQL, id);
-  return rows[0];
+
+  const { rows } = await pool.query(SQL, id)
+  const tableName = rows[0].name;
+
+  SQL = `
+  SELECT * FROM ${tableName}
+  JOIN items
+  ON items.name = ${tableName}.title
+  WHERE items.id = $1;
+  `
+
+  const result = await pool.query(SQL, id);
+  return result.rows[0];
 }
 
 async function updateItem(newValue, oldValue) {
