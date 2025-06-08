@@ -18,11 +18,14 @@
           <%= item.name%>
           <a href="/items/<%= item.id%>/page">Item details</a>
           <a href="/items/<%= item.id%>/update">Update item's details</a>
+          <a href="/items/<%= item.id%>/delete">Delete item</a>
         </li>
       <% }) %>
     </ul>
     <div>
       Add a new item to this category <a href="/categories/items/<%= category.id%>/new">here</a>.
+      <br><br>
+      <a href="/">Home</a>
     </div>
   </div>
 </body>

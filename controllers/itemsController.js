@@ -4,6 +4,10 @@ module.exports = {
   getPage: async (req, res) => {
     const id = [Number(req.params.itemId)];
     const item = await db.getItem(id);
+    // These details should not be rendered
+    delete item.id;
+    delete item.name;
+    delete item.categories_id;
     res.render('items/itemPage.ejs', {item})
   },
   getForm: async (req, res) => {
@@ -30,4 +34,13 @@ module.exports = {
     await db.updateItem(newValue, item.name);
     res.redirect(`/categories/${Number(item.categories_id)}/page`);
   },
+  deleteItem: async (req, res) => {
+    const itemId = [Number(req.params.itemId)];
+    const item = await db.getItem(itemId);
+    console.log(item)
+    const category = await db.getCategory([Number(item.categories_id)]);
+    await db.deleteItem(itemId, item.name, category.name);
+    res.redirect(`/categories/${Number(item.categories_id)}/page`);
+  }
+
 };

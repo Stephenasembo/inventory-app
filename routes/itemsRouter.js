@@ -7,5 +7,6 @@ router.get('/:categoryId/new', controller.getForm);
 router.post('/:categoryId/new', controller.createItem);
 router.get('/:itemId/update', controller.getUpdateForm);
 router.post('/:itemId/update', controller.updateItem);
+router.get('/:itemId/delete', controller.deleteItem);
 
 module.exports = router;

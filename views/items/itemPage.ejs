@@ -9,11 +9,9 @@
   <h1><%= item.title%></h1>
   <div>
     <% for(const [key, value] of Object.entries(item)) { %>
-      <% if(key !== 'id') { %>
-        <p>
-          <%= key%>: <%= value%>
-        </p>
-      <% } %>
+      <p>
+        <%= key%>: <%= value%>
+      </p>
     <% } %>
   </div>
 </body>

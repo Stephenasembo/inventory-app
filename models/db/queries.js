@@ -132,6 +132,20 @@ async function getCategoryFields(category) {
   return null;
 }
 
+async function deleteItem(itemId, itemName, categoryName) {
+  let SQL = `
+  DELETE FROM items
+  WHERE id = $1;
+  `
+  await pool.query(SQL, itemId);
+
+  SQL = `
+  DELETE FROM ${categoryName}
+  WHERE title = '${itemName}';
+  `
+  await pool.query(SQL);
+}
+
 module.exports = {
   createCategory,
   createVideoGame,
@@ -144,4 +158,5 @@ module.exports = {
   getItem,
   updateItem,
   getCategoryFields,
+  deleteItem,
 }
