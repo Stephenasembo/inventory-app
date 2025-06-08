@@ -11,11 +11,23 @@
       Create a new category by filling in the category's details.
     </p>
     <form action="/categories/new" method="post">
-      <label for="categoryName">Name: </label>
-      <input type="text" name="categoryName" id="categoryName" required>
-      <br><br>
+      <p>
+        <label for="categoryName">Name: </label>
+        <input type="text" name="categoryName" id="categoryName" required>
+      </p>
+      <p>
       <label for="description">Description: </label>
       <textarea name="description" id="description" maxlength="250" required></textarea>
+      </p>
+      <p>
+        <h3>Choose the fields to include for items added to this category.</h3>
+        <input type="checkbox" name="price" id="price" value="price INTEGER">
+        <label for="price">Price</label>
+        <input type="checkbox" name="stock" id="stock" value="stock INTEGER">
+        <label for="stock">Stock</label>
+        <input type="checkbox" name="cover_image" id="coverImage" value="cover_image TEXT">
+        <label for="coverImage">Cover Image</label>
+      </p>
       <button type="submit">Submit</button>
     </form>
   </div>

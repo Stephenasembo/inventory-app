@@ -125,18 +125,13 @@ async function updateItem(category, newValue, oldValue) {
 }
 
 async function getCategoryFields(category) {
-  let categories = await getAllCategories();
-  categories = categories.map((category) => category.name);
-  if(categories.includes(category)) {
-    const SQL = `
-    SELECT column_name, data_type
-    FROM information_schema.columns
-    WHERE table_name = '${category}';
-    `
-    const { rows } = await pool.query(SQL)
-    return rows;
-  }
-  return null;
+  const SQL = `
+  SELECT column_name, data_type
+  FROM information_schema.columns
+  WHERE table_name = '${category}';
+  `
+  const { rows } = await pool.query(SQL)
+  return rows;
 }
 
 async function deleteItem(itemId, itemName, categoryName) {
@@ -149,6 +144,27 @@ async function deleteItem(itemId, itemName, categoryName) {
   SQL = `
   DELETE FROM ${categoryName}
   WHERE title = '${itemName}';
+  `
+  await pool.query(SQL);
+}
+
+async function createUserCategory(input) {
+  let { categoryName, description } = input;
+  categoryName = categoryName.toLowerCase()
+  await createCategory([categoryName, description]);
+  let fields = [];
+  const whitelist = ['price INTEGER', 'stock INTEGER', 'cover_image TEXT'];
+  (Object.values(input)).forEach((field) => {
+    if (whitelist.includes(field)) {
+      fields.push(field);
+    }
+  })
+  fields = fields.join(',');
+  const SQL = `
+  CREATE TABLE IF NOT EXISTS ${categoryName}
+  (id INTEGER PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
+  title TEXT,
+  ${fields});
   `
   await pool.query(SQL);
 }
@@ -166,4 +182,5 @@ module.exports = {
   updateItem,
   getCategoryFields,
   deleteItem,
+  createUserCategory,
 }

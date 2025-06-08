@@ -14,6 +14,7 @@ module.exports = {
     const id = [Number(req.params.categoryId)];
     const category = await db.getCategory(id);
     const fields = await db.getCategoryFields(category.name);
+    console.log(fields);
     res.render('items/itemForm.ejs', { category, fields })
   },
   createItem: async (req, res) => {
