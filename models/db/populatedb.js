@@ -72,11 +72,56 @@ const categories = [
 ]
 
 const items = [
-  { name: 'GTA 5', category_id: 1 },
-  { name: 'FC25', category_id: 1 },
-  { name: 'Catan', category_id: 2 },
-  { name: 'Dominion', category_id: 2 },
-
+  {
+    title: 'GTA 5',
+    platform: ' PlayStation 4, PlayStation 5, Xbox One, Xbox Series X and Series S, Xbox 360, PlayStation 3, Microsoft Windows',
+    genre: 'Open world, Action-adventure game, First-person shooter, Nonlinear gameplay',
+    developer: 'Rockstar North',
+    publisher: 'Rockstar Games',
+    price: 30,
+    release_date: '2020',
+    cover_image: 'image_url',
+    stock: 6
+  },
+  {
+    title: 'FC25',
+    platform: 'PlayStation 4, PlayStation 5',
+    genre: 'sport',
+    developer: 'EA Vancouver and EA Romania',
+    publisher: 'Electronic Arts Inc',
+    price: 25,
+    release_date: '9/20/2024',
+    cover_image: 'image_url',
+    stock: 3
+  },
+  {
+    title: 'Catan',
+    genre: 'Strategy',
+    designer: 'Klaus Teuber',
+    publisher: 'Kosmos',
+    min_players: 3,
+    max_players: 4,
+    age_rating: 10,
+    duration: 90,
+    release_year: 1995,
+    price: 45,
+    cover_image: 'image_url',
+    stock: 15
+  },
+  {
+    title: 'Dominion',
+    genre: 'Deck building',
+    designer: 'Donald X. Vaccarino',
+    publisher: 'Rio Grande Games',
+    min_players: 2,
+    max_players: 4,
+    age_rating: 13,
+    duration: 30,
+    release_year: 2008,
+    price: 44,
+    cover_image: 'image_url',
+    stock: 9
+  },
 ]
 
 async function main(){
@@ -90,27 +135,18 @@ async function main(){
       const values = [category.name, category.description];
       await db.createCategory(values);
     }
+    console.log('Populated categories table');
 
-    // Populate items table
+    // Populate items and corresponding category table
     for (const item of items) {
-      const values = [item.name, item.category_id];
-      await db.createItem(values);
+      const values = new Map(Object.entries(item));
+      let categoryId = 1;
+      if (item.title === 'Dominion' || item.title === 'Catan') {
+        categoryId = 2;
+      }
+      await db.createItem(categoryId, values);
     }
-
-    // Populate video_games table
-    for (const game of videoGames) {
-      const values = [game.title, game.platform, game.genre, game.developer, game.publisher,
-        game.price, game.release_date, game.cover_image, game.stock];
-      await db.createVideoGame(values);
-    };
-
-    // Populate board_games table
-    for (const game of boardGames) {
-      const values = [game.title, game.genre, game.designer, game.publisher, game.min_players, game.max_players,
-        game.age_rating, game.duration, game.release_year, game.price, game.cover_image, game.stock];
-      await db.createBoardGame(values);
-    };
-
+    
     console.log('Success');
   }
   catch(err) {
