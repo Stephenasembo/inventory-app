@@ -108,12 +108,19 @@ async function getItem(id) {
   return result.rows[0];
 }
 
-async function updateItem(newValue, oldValue) {
-  const SQL = `
+async function updateItem(category, newValue, oldValue) {
+  let SQL = `
   UPDATE items SET name = $1
   WHERE name = $2;
   `
-  const values = [newValue, oldValue]
+  let values = [newValue, oldValue]
+  await pool.query(SQL, values);
+
+  SQL = `
+  UPDATE ${category} SET title = $1
+  WHERE title = $2
+  `
+  values = [newValue, oldValue]
   await pool.query(SQL, values);
 }
 

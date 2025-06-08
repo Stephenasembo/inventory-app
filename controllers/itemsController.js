@@ -30,9 +30,10 @@ module.exports = {
   updateItem: async (req, res) => {
     const id = [req.params.itemId];
     const item = await db.getItem(id);
+    const category = await db.getCategory([item.categories_id])
     const newValue = req.body.newItemName;
-    await db.updateItem(newValue, item.name);
-    res.redirect(`/categories/${Number(item.categories_id)}/page`);
+    await db.updateItem(category.name, newValue, item.name);
+    res.redirect(`/categories/${Number(category.id)}/page`);
   },
   deleteItem: async (req, res) => {
     const itemId = [Number(req.params.itemId)];
