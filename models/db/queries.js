@@ -48,6 +48,14 @@ async function resetDatabase() {
   RESTART IDENTITY CASCADE;
   `
   await pool.query(SQL);
+  for (const table of tables.split(',')) {
+    if(table !== 'categories' && table !== 'items') {
+      SQL = `
+      DROP TABLE ${table};
+      `
+      await pool.query(SQL);
+    }
+  }
 }
 
 async function createItem(categoryId, mappedValues) {
@@ -196,6 +204,23 @@ async function deleteCategory(id) {
   await pool.query(SQL, [categoryId]);
 }
 
+async function updateCategory(input) {
+  const { categoryName, previousName } = input;
+  let SQL = `
+  UPDATE categories
+  SET name = $1
+  WHERE name = $2;
+  `
+  let values = [categoryName, previousName]
+  await pool.query(SQL, values);
+
+  SQL = `
+  ALTER TABLE ${previousName}
+  RENAME TO ${categoryName};
+  `
+  await pool.query(SQL);
+}
+
 module.exports = {
   createCategory,
   createVideoGame,
@@ -211,4 +236,5 @@ module.exports = {
   deleteItem,
   createUserCategory,
   deleteCategory,
+  updateCategory,
 }

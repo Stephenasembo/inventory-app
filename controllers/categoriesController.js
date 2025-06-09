@@ -1,4 +1,5 @@
-const db = require('../models/db/queries')
+const db = require('../models/db/queries');
+const { getUpdateForm } = require('./itemsController');
 
 module.exports = {
   getPage: async (req, res) => {
@@ -19,5 +20,18 @@ module.exports = {
     const id = req.params.categoryId;
     await db.deleteCategory(id);
     res.redirect('/');
-  }
+  },
+  getUpdateForm: async (req, res) => {
+    const id = req.params.categoryId;
+    const category = await db.getCategory([Number(id)]);
+    res.render('categories/updateCategory', {category})
+  },
+  updateCategory: async (req, res) => {
+    const id = req.params.categoryId;
+    const inputObj = req.body;
+    const category = await db.getCategory([Number(id)]);
+    inputObj.previousName = (category.name).toLowerCase();
+    await db.updateCategory(inputObj);
+    res.redirect('/');
+  },
 };
