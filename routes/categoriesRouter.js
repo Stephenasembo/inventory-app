@@ -7,5 +7,6 @@ router.get('/:categoryId/page', controller.getPage);
 router.get('/new', controller.getForm);
 router.post('/new', controller.createCategory);
 router.use('/items', itemsRouter);
+router.get('/:categoryId/delete', controller.deleteCategory);
 
 module.exports = router;

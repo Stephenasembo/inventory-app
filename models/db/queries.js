@@ -169,6 +169,23 @@ async function createUserCategory(input) {
   await pool.query(SQL);
 }
 
+async function deleteCategory(id) {
+  let categoryId = Number(id);
+  const category = await getCategory([categoryId]);
+  const tableName = category.name;
+  // Drop table
+  let SQL = `
+  DROP TABLE ${tableName};
+  `
+  await pool.query(SQL);
+  // Delete record in categories
+  SQL = `
+  DELETE FROM categories
+  WHERE id = $1;
+  `
+  await pool.query(SQL, [categoryId]);
+}
+
 module.exports = {
   createCategory,
   createVideoGame,
@@ -183,4 +200,5 @@ module.exports = {
   getCategoryFields,
   deleteItem,
   createUserCategory,
+  deleteCategory,
 }

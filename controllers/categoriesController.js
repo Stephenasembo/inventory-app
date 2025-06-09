@@ -15,4 +15,9 @@ module.exports = {
     await db.createUserCategory(values)
     res.redirect('/')
   },
+  deleteCategory: async (req, res) => {
+    const id = req.params.categoryId;
+    await db.deleteCategory(id);
+    res.redirect('/');
+  }
 };
