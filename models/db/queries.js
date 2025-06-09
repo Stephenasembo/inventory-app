@@ -37,8 +37,14 @@ async function getAllCategories() {
 }
 
 async function resetDatabase() {
-  const SQL = `
-  TRUNCATE categories, video_games, board_games, items
+  let SQL = `
+  SELECT table_name FROM information_schema.tables
+  WHERE table_schema = 'public'
+  `
+  const { rows } = await pool.query(SQL);
+  let tables = (rows.map((obj) => obj.table_name)).join(',');
+  SQL = `
+  TRUNCATE ${tables}
   RESTART IDENTITY CASCADE;
   `
   await pool.query(SQL);
@@ -153,7 +159,11 @@ async function createUserCategory(input) {
   categoryName = categoryName.toLowerCase()
   await createCategory([categoryName, description]);
   let fields = [];
-  const whitelist = ['price INTEGER', 'stock INTEGER', 'cover_image TEXT'];
+  const whitelist = [
+    'price INTEGER', 'stock INTEGER', 'cover_image TEXT', 'genre TEXT', 'platform TEXT',
+    'developer TEXT','designer TEXT', 'publisher TEXT', 'release_date TEXT', 'min_players INTEGER',
+    'max_players INTEGER', 'age_rating INTEGER', 'duration INTEGER', 'release_year INTEGER',
+  ];
   (Object.values(input)).forEach((field) => {
     if (whitelist.includes(field)) {
       fields.push(field);
