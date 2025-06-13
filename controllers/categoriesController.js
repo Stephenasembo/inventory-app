@@ -28,10 +28,21 @@ module.exports = {
   },
   updateCategory: async (req, res) => {
     const id = req.params.categoryId;
-    const inputObj = req.body;
+    const inputObj = verifyData(req.body);
     const category = await db.getCategory([Number(id)]);
     inputObj.previousName = (category.name).toLowerCase();
     await db.updateCategory(inputObj);
     res.redirect('/');
   },
 };
+
+function verifyData(body) {
+  if(body.newCol === '') {
+    delete body.newCol;
+    delete body.dataType;
+  }
+  if(body.delCol === '') {
+    delete body.delCol;
+  }
+  return body;
+}

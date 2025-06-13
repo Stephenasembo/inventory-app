@@ -14,7 +14,6 @@ module.exports = {
     const id = [Number(req.params.categoryId)];
     const category = await db.getCategory(id);
     const fields = await db.getCategoryFields(category.name);
-    console.log(fields);
     res.render('items/itemForm.ejs', { category, fields })
   },
   createItem: async (req, res) => {
@@ -39,7 +38,6 @@ module.exports = {
   deleteItem: async (req, res) => {
     const itemId = [Number(req.params.itemId)];
     const item = await db.getItem(itemId);
-    console.log(item)
     const category = await db.getCategory([Number(item.categories_id)]);
     await db.deleteItem(itemId, item.name, category.name);
     res.redirect(`/categories/${Number(item.categories_id)}/page`);

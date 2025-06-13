@@ -11,7 +11,29 @@
     <form action="/categories/<%= category.id%>/update" method="post">
       <p>
         <label for="categoryName">Enter a new name: </label>
-        <input type="text" name="categoryName" id="categoryName">
+        <input type="text" name="categoryName" id="categoryName" required>
+        <br><br>
+        <label for="categoryDescription">Enter a new description: </label>
+        <textarea name="categoryDescription" id="categoryDescription" required></textarea>
+      </p>
+      <p>
+        Want to add a new field for <%= category.name%> items ?
+        <br><br>
+        <label for="newCol">Enter field name: </label>
+        <input type="text" name="newCol" id="newCol">
+        <fieldset style="width: max-content;">
+          <legend>Select the data type for your new field.</legend>
+          <label for="textType">Text</label>
+          <input type="radio" name="dataType" id="textType" value="TEXT" checked>
+          <label for="numberType">Number</label>
+          <input type="radio" name="dataType" id="numberType" value="INTEGER">
+        </fieldset>
+      </p>
+      <p>
+        Want to delete a field for <%= category.name%>'s items ?
+        <br><br>
+        <label for="delCol">Enter field name: </label>
+        <input type="text" name="delCol" id="delCol">
       </p>
       <button type="submit">Update</button>
     </form>

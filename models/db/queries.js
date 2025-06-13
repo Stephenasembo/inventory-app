@@ -205,13 +205,21 @@ async function deleteCategory(id) {
 }
 
 async function updateCategory(input) {
-  const { categoryName, previousName } = input;
+  const { categoryName, previousName, categoryDescription } = input;
+  let values = [previousName, categoryDescription]
   let SQL = `
+  UPDATE categories
+  SET description = $2
+  WHERE name = $1
+  `
+  await pool.query(SQL, values);
+
+  SQL = `
   UPDATE categories
   SET name = $1
   WHERE name = $2;
   `
-  let values = [categoryName, previousName]
+  values = [categoryName, previousName]
   await pool.query(SQL, values);
 
   SQL = `
@@ -219,6 +227,21 @@ async function updateCategory(input) {
   RENAME TO ${categoryName};
   `
   await pool.query(SQL);
+
+  if(input.newCol) {
+    SQL = `
+    ALTER TABLE ${categoryName}
+    ADD ${input.newCol} ${input.dataType};
+    `
+    await pool.query(SQL);
+  }
+  if(input.delCol) {
+    SQL = `
+    ALTER TABLE ${categoryName}
+    DROP COLUMN ${input.delCol};
+    `
+    await pool.query(SQL);
+  }
 }
 
 module.exports = {
