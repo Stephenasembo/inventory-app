@@ -1,4 +1,5 @@
 const pool = require('./pool');
+const format = require('pg-format');
 
 async function createCategory(values) {
   const SQL = `
@@ -178,12 +179,12 @@ async function createUserCategory(input) {
     }
   })
   fields = fields.join(',');
-  const SQL = `
-  CREATE TABLE IF NOT EXISTS ${categoryName}
+  const SQL = format(`
+  CREATE TABLE IF NOT EXISTS %I
   (id INTEGER PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
   title TEXT,
   ${fields});
-  `
+  `, categoryName);
   await pool.query(SQL);
 }
 
@@ -222,24 +223,27 @@ async function updateCategory(input) {
   values = [categoryName, previousName]
   await pool.query(SQL, values);
 
-  SQL = `
+  SQL = format(`
   ALTER TABLE ${previousName}
-  RENAME TO ${categoryName};
-  `
+  RENAME TO %I;
+  `, categoryName);
+
   await pool.query(SQL);
 
   if(input.newCol) {
-    SQL = `
-    ALTER TABLE ${categoryName}
-    ADD ${input.newCol} ${input.dataType};
-    `
+    const { newCol, dataType } = input;
+    SQL = format(`
+    ALTER TABLE %I
+    ADD %s %s;
+    `, categoryName, newCol, dataType)
     await pool.query(SQL);
   }
   if(input.delCol) {
-    SQL = `
-    ALTER TABLE ${categoryName}
-    DROP COLUMN ${input.delCol};
-    `
+    const { delCol } = input;
+    SQL = format(`
+    ALTER TABLE %I
+    DROP COLUMN %s;
+    `, categoryName, delCol)
     await pool.query(SQL);
   }
 }
