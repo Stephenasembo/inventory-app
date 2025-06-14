@@ -1,39 +1,40 @@
 const db = require('../models/db/queries');
+const asyncHandler = require('express-async-handler');
 const { getUpdateForm } = require('./itemsController');
 
 module.exports = {
-  getPage: async (req, res) => {
+  getPage: asyncHandler(async (req, res) => {
     const id = [Number(req.params.categoryId)];
     const category = await db.getCategory(id);
     const items = await db.getAllItems(id);
     res.render('categories/categoryPage.ejs', { category, items });
-  },
-  getForm: (req, res) => {
+  }),
+  getForm: asyncHandler( (req, res) => {
     res.render('categories/categoryForm.ejs')
-  },
-  createCategory: async (req, res) => {
+  }),
+  createCategory: asyncHandler( async (req, res) => {
     const values = req.body;
     await db.createUserCategory(values)
     res.redirect('/')
-  },
-  deleteCategory: async (req, res) => {
+  }),
+  deleteCategory: asyncHandler( async (req, res) => {
     const id = req.params.categoryId;
     await db.deleteCategory(id);
     res.redirect('/');
-  },
-  getUpdateForm: async (req, res) => {
+  }),
+  getUpdateForm: asyncHandler( async (req, res) => {
     const id = req.params.categoryId;
     const category = await db.getCategory([Number(id)]);
     res.render('categories/updateCategory', {category})
-  },
-  updateCategory: async (req, res) => {
+  }),
+  updateCategory: asyncHandler( async (req, res) => {
     const id = req.params.categoryId;
     const inputObj = verifyData(req.body);
     const category = await db.getCategory([Number(id)]);
     inputObj.previousName = (category.name).toLowerCase();
     await db.updateCategory(inputObj);
     res.redirect('/');
-  },
+  }),
 };
 
 function verifyData(body) {
