@@ -15,6 +15,14 @@ app.use((express.urlencoded({extended: true})));
 app.use('/', indexRouter);
 app.use('/categories', categoriesRouter);
 app.use('/items', itemsRouter);
+app.use((req, res) => {
+  res.render('404', {url: req.originalUrl});
+});
+
+app.use((err, req, res, next) => {
+  console.error(err);
+  res.status(err.statusCode || 500).send(err.message)
+})
 
 app.listen(PORT, () => {
   console.log(`The app is live on port - ${PORT}`)
