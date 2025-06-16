@@ -44,19 +44,39 @@ async function resetDatabase() {
   `
   const { rows } = await pool.query(SQL);
   let tables = (rows.map((obj) => obj.table_name)).join(',');
-  SQL = `
-  TRUNCATE ${tables}
-  RESTART IDENTITY CASCADE;
-  `
-  await pool.query(SQL);
-  for (const table of tables.split(',')) {
-    if(table !== 'categories' && table !== 'items') {
-      SQL = `
-      DROP TABLE ${table};
-      `
-      await pool.query(SQL);
+  if(tables.length !== 0) {
+    SQL = `
+    TRUNCATE ${tables}
+    RESTART IDENTITY CASCADE;
+    `
+    await pool.query(SQL);
+    for (const table of tables.split(',')) {
+      if(table !== 'categories' && table !== 'items') {
+        SQL = `
+        DROP TABLE ${table};
+        `
+        await pool.query(SQL);
+      }
     }
-  }
+  } else {
+    // Create categories and items table
+    SQL = `
+    CREATE TABLE categories IF NOT EXISTS (
+    id SERIAL PRIMARY KEY,
+    name TEXT,
+    description TEXT
+    );`
+    await pool.query(SQL);
+
+    SQL = `
+    CREATE TABLE items IF NOT EXISTS (
+    id SERIAL PRIMARY KEY,
+    name TEXT NOT NULL,
+    categories_id INTEGER REFERENCES categories(id) ON DELETE CASCADE
+    ); `
+    await pool.query(SQL);
+
+    }
 }
 
 async function createItem(categoryId, mappedValues) {
@@ -181,7 +201,7 @@ async function createUserCategory(input) {
   fields = fields.join(',');
   const SQL = format(`
   CREATE TABLE IF NOT EXISTS %I
-  (id INTEGER PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
+  (id SERIAL PRIMARY KEY,
   title TEXT,
   ${fields});
   `, categoryName);
