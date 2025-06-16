@@ -8,5 +8,8 @@ const remoteDb = process.env.REMOTE_DB;
 
 module.exports = new Pool ({
   connectionString: remoteDb,
-  ssl: { rejectUnauthorized: false, },
+  ssl: {
+    rejectUnauthorized: true,
+    ca: fs.readFileSync("./ca.pem").toString(),
+  },
 });
