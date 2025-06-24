@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="/styles.css">
   <title>Document</title>
 </head>
 <body>
@@ -14,11 +15,13 @@
     <p>Here is the list of items in this category:</p>
     <ul>
       <% items.forEach((item) => { %>
-        <li>
-          <%= item.name%>
-          <a href="/items/<%= item.id%>/page">Item details</a>
-          <a href="/items/<%= item.id%>/update">Update item's details</a>
-          <a href="/items/<%= item.id%>/delete">Delete item</a>
+        <li class="item">
+          <h2><%= item.name%></h2>
+          <div class="itemLinks">
+            <a href="/items/<%= item.id%>/page">Get details</a>
+            <a href="/items/<%= item.id%>/update">Update item</a>
+            <a href="/items/<%= item.id%>/delete">Delete item</a>
+          </div>
         </li>
       <% }) %>
     </ul>
