@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "populatedb": "node models/db/populatedb.js",
-    "dev": "node --watch app.js"
+    "dev": "NODE_ENV=dev node --watch app.js"
   },
   "repository": {
     "type": "git",
